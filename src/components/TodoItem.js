@@ -1,7 +1,7 @@
 import styles from '../styles/TodoItem.module.css'
 import { useState } from 'react';
 
-const TodoItem = ({ itemProp, handleChange, delToDo }) => {
+const TodoItem = ({ itemProp, handleChange, delToDo, setUpdate }) => {
     const [editing, setEditing] = useState(false);
 
     const completedStyle = {
@@ -23,6 +23,12 @@ const TodoItem = ({ itemProp, handleChange, delToDo }) => {
         editMode.display = 'none';
       }
 
+      const handleUpdatedDone = (event) => {
+        if (event.key === 'Enter') {
+          setEditing(false);
+        }
+      };
+
     return (<li className={styles.item}>
     <div className='styles.content' style={viewMode }>
     <input 
@@ -30,18 +36,19 @@ const TodoItem = ({ itemProp, handleChange, delToDo }) => {
     checked={itemProp.completed}
     onChange={() => handleChange(itemProp.id)}
      />
-      <button onClick={handleEditing}>Edit</button>
-     <button onClick={() => delToDo(itemProp.id)} >Delete</button>
      <span style={itemProp.completed ? completedStyle : null}>
     {itemProp.title}
     </span>
+      <button onClick={handleEditing}>Edit</button>
+     <button onClick={() => delToDo(itemProp.id)} >Delete</button>
     </div>
     <input
       type="text"
       value={itemProp.title}
       className={styles.textInput}
       style={editMode}
-      onChange={(e) => console.log(e.target.value, itemProp.id)}
+      onChange={(e) => setUpdate(e.target.value, itemProp.id)}
+      onKeyDown={handleUpdatedDone}
     />
   </li>
     )
